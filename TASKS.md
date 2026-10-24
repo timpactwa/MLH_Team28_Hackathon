@@ -401,13 +401,13 @@ Pure Python, no AI, everything unit-tested.
 ---
 
 ### T-411 · Documentation audit and project summary
-- status: claimed by newton/docs-audit-agent @ 00:00 (session time unavailable)
+- status: review (newton/docs-audit-agent; audit complete locally; claim push blocked by GitHub 403)
 - deps: none
 - paths: `TASKS.md` (this task only); read-only review of repository documentation and linked public sources
 - done when:
-  - [ ] Compare documented implementation claims with tracked repository files
-  - [ ] Cross-check key external technical and NYC service claims against official sources
-  - [ ] Report current project state, inconsistencies, and remaining uncertainties to the user
+  - [x] Compare documented implementation claims with tracked repository files
+  - [x] Cross-check key external technical and NYC service claims against official sources
+  - [x] Report current project state, inconsistencies, and remaining uncertainties to the user
 
 ---
 
