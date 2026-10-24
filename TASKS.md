@@ -171,7 +171,7 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
 - notes: `/` runs the flow. Steps: pick the example studio or your own room, confirm the measurements (continuing marks them confirmed), needs (Gemma reads free text into an editable list; you can also build the list by hand), two options side by side, each with a "How it got here" list of every checker round, then the editor, 3D view and text summary. Without a key, `/api/*` returns 503 and the UI offers the non-AI paths: the prepared reading of the example needs, the prepared example plan (hand-written layouts, checked live, labeled as such; only for the example room and furniture, see `exampleApplies`), and "Arrange it myself" (`autoPlace`). T-102: add a photo card to `StartStep.tsx` that produces an estimated `Room` and goes to the room step. Verified with Playwright plus axe (clean at 1440 and 390 wide).
 
 ### T-304 · Compare views (layers b/c)
-- status: open
+- status: claimed (tim/claude)
 - deps: T-302, T-403
 - paths: `components/compare/`
 - done when:
@@ -202,7 +202,7 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
 ## Lane 4: visuals + ship (P4)
 
 ### T-401 · Cloud Run hello-world
-- status: review: Dockerfile and DEPLOY.md written; needs a human to build the image, create the secret, deploy, and confirm credits (tim/claude)
+- status: claimed: moving hosting off Google Cloud to Vercel (tim/claude)
 - deps: T-002
 - paths: `Dockerfile`, `.dockerignore`, `docs/DEPLOY.md`
 - done when:
@@ -220,7 +220,7 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
   - [ ] Full flow works at the public URL; prepared example loads instantly
 
 ### T-403 · Gemini staged photo (layer b, cut #2)
-- status: open
+- status: claimed (tim/claude)
 - deps: T-101
 - paths: `lib/ai/staging.ts`, `app/api/stage/route.ts`
 - done when:
@@ -263,7 +263,7 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
 - notes: README has the pitch, how it works, a mermaid architecture diagram, setup and env vars, step-by-step demo reproduction without a key, sample needs, responsible AI, accessibility, and links. The diagram lives in the README for now rather than `docs/ARCHITECTURE.md`.
 
 ### T-408 · Cost and latency report
-- status: open
+- status: claimed: measurement script (tim/claude)
 - deps: T-103, T-403
 - paths: `docs/COST.md`
 - done when:
