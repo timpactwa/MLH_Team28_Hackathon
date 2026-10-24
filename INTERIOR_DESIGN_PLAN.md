@@ -1,6 +1,23 @@
 # Interior design and virtual tour hackathon plan
 
-Task: T-412. Date: October 24, 2026. Status: proposed product direction; implementation has not started.
+Date: October 24, 2026. Status: **decisions locked** after a team grilling session. The work is tracked in [TASKS.md](TASKS.md).
+
+## Locked decisions
+
+These override anything later in this document that conflicts with them. To change one, raise it in the team chat; don't edit it here on your own.
+
+| # | Decision | Locked choice |
+| --- | --- | --- |
+| D1 | User and housing decision | Students and renters deciding whether a smaller, cheaper unit fits their life before they sign. The showpiece is a wheelchair-clearance check (60 in turning circle, door clearance), framed as "checked against the room model you confirmed," never as accessibility certification. Theme areas: affordability, housing search, accessible housing. |
+| D2 | Tracks | MLH: **Best UI/UX** (the only MLH track we enter). GDG: **Best Overall AI for Housing**. Gemma 4 remains the planner even though we are not entering the Gemma track. |
+| D3 | What the AI does (Gemma 4) | (1) Read the photo: estimate door and window positions and proportions to fill in the room editor, all labeled *estimated* until the user confirms. (2) Turn free-text needs into catalog furniture items plus clearance requirements. (3) Propose two layouts as JSON. Geometry code returns specific errors, Gemma revises (at most 2 rounds) and explains the tradeoffs. If a layout still fails, say plainly that it doesn't fit. |
+| D4 | What users see | Three layers, built in this order: **(a)** a Three.js / R3F 3D room built from the confirmed geometry, plus a 2D plan with clearance zones, WASD and click-to-move walkthrough (core); **(b)** a Gemini-staged version of the original photo, shown side by side as a "style concept"; **(c)** a World Labs Marble world, **pre-generated** and labeled "AI concept, not to scale. The 3D plan is what we checked." |
+| D5 | World Labs guardrails | Nobody starts it until (a) works end to end. One owner, in separate files. **Kill rule:** if it doesn't load in the browser by Sun 2 AM, or it invents doors, it becomes a concept preview or gets cut. Cost is about $1.26 per standard world or $0.18 per draft, sold in $5 minimums out of pocket. Generation takes about 5 minutes, so it is never live in the video. |
+| D6 | Team lanes | Frontend/UX: Tim. AI: P2. Geometry and data: P3. Visuals and ship: P4. Names to be filled in. |
+| D7 | Stack | TypeScript everywhere: Next.js (App Router), React Three Fiber + drei, Tailwind, Zod schemas, `@google/genai`, and a pure-TS geometry module shared by the browser and the server. Deployed as one container on Cloud Run with Secret Manager. No database. |
+| D8 | Demo room | A free-licensed empty-room photo (Unsplash or Pexels; license link in the README), with dimensions labeled "example dimensions, not measured." The demo shows Gemma's estimates being corrected by the user. |
+| D9 | Timeline | Sat +1 hr: schema locked, repo licensed, hello-world deployed on Cloud Run. Sat 6 PM: skeleton working end to end. Sat midnight: full loop deployed, sofa rejection demo-able. Sun 2 AM: World Labs kill decision. Sun 9 AM: feature freeze. Sun 11:00–11:30 AM: both submissions in. |
+| D10 | Cut order | Cut in this order: World Labs, then the staged photo, then Gemma reading the photo (fall back to manual entry). **Never cut:** the geometry checks, the propose → check → revise loop, the 3D room, the accessible non-3D summary. |
 
 ## The idea
 
@@ -10,7 +27,7 @@ Help renters imagine an empty apartment as their home. Users provide listing pho
 
 The initial audience is students and renters considering compact homes. The core question is whether a room can accommodate their daily activities and furniture. A virtual tour makes the answer easier to understand.
 
-This proposal follows the team's decision to retire the Waypoint homelessness-resource idea. The existing Waypoint documentation and tasks remain historical context until a separate cleanup updates them. Their product-specific decisions do not describe this proposal. This document does not change existing API contracts or authorize deployment.
+This replaces the retired Waypoint homelessness-resource idea. Its docs were removed and are still in git history.
 
 ## The problem and product promise
 
@@ -62,26 +79,26 @@ The image editor produces a visual design reference. A prompt to preserve walls 
 
 A generated 3D world is an approximate visualization. Its appearance, collider mesh, and apparent scale do not prove that furniture fits the actual apartment. Keep the measured layout visible as a separate view unless the tour demonstrably matches it.
 
-## Proposed technical approach
+## Technical approach (see D7)
 
 | Component | Proposed approach | Decision status |
 | --- | --- | --- |
-| Web app | Next.js with a Three.js viewer, optionally React Three Fiber | Proposed; confirm before implementation |
-| Planning | A multimodal model interprets photos and needs, then proposes structured furniture placements | Model and track choice pending |
-| Constraints | Pure geometry checks against the confirmed room model | Core requirement |
-| Staging | Gemini image editing generates a furnished reference image | Test image fidelity and account access |
-| Optional immersive rendering | World Labs Marble generates a world; Spark renders its Gaussian splats in Three.js | Experimental; requires access, cost, and fidelity checks |
-| Reliable tour fallback | Render the confirmed room and furniture as conventional 3D geometry | Default if generated worlds drift |
-| Backend | Thin API layer for model calls, validation, and generation jobs | Framework pending |
-| Deployment | Prefer a simple web deployment with server-side API credentials | Human approval required before deployment |
+| Web app | Next.js (App Router), React Three Fiber + drei, Tailwind | Locked (D7) |
+| Planning | Gemma 4 via `@google/genai`: reads the photo, converts needs to furniture, proposes layouts, revises from checker errors (D3) | Locked; confirm model ID available to the key |
+| Constraints | Pure-TS geometry module, shared by the editor (live) and the server (loop) | Locked, never cut |
+| Staging | Gemini image editing generates a furnished style concept | Locked as layer (b); test fidelity |
+| Immersive concept | World Labs Marble world, rendered with Spark in Three.js, pre-generated | Layer (c); kill rule D5 |
+| Core tour | Confirmed room and furniture as conventional 3D geometry | Layer (a), the core |
+| Backend | Next.js API routes; Zod validates all model JSON | Locked (D7) |
+| Deployment | One container on Cloud Run with Secret Manager, paid from the $25 credits | Locked; a human runs the deploy |
 
 Suggested flow: user inputs become a room model and design brief. The planner proposes arrangements, the geometry checker rejects invalid proposals, and the viewer renders an accepted arrangement. Image generation adds a style reference. World generation is optional.
 
 Do not train a reconstruction model during the hackathon. Traditional Gaussian splatting depends on scene imagery and camera reconstruction. Sparse listing photos may lack overlap or omit entire surfaces. Independently edited photos can also disagree about furniture and room structure.
 
-## First feasibility experiment
+## World Labs experiment (layer c, after core works)
 
-Time-box the generated-world experiment to 60–90 minutes after access is available. This is a planning budget, not a measured generation time.
+Time-box it to 60–90 minutes. The kill rule is in D5.
 
 Use one permitted empty-room photo. Generate a furnished edit, then generate an explorable world from that edit. Inspect the result from several positions.
 
@@ -118,7 +135,7 @@ Confirmed from the event deck (slides 7, 8, 12). It supersedes the event web pag
 - **Submission:** public GitHub repo with an open-source license file, a two-minute video, project name, description and tech used. Window is Sunday 11:00 AM–12:30 PM, and 12:30 PM is the hard deadline. Late submissions are not accepted.
 - The deck's theme slide says "Creative builds welcome, including AI-designed tiny homes, if they solve a real need." The design direction fits, provided the housing need is validated.
 
-The MLH track is still open. Gemini image generation does not count toward the Gemma track.
+**Chosen:** Best UI/UX and the GDG Housing track (D2).
 
 ## Responsible product behavior
 
@@ -133,7 +150,7 @@ The MLH track is still open. Gemini image generation does not count toward the G
 
 ## Build order and acceptance criteria
 
-Complete the feasibility experiment first. Then build the confirmed room model and a basic viewer. Add the furniture catalog and geometry checks before connecting AI-generated arrangements. Add staging, the optional splat viewer, and visual polish after the core flow works.
+Follow D4/D5: build the schema, geometry checks and the 3D room first, then the Gemma loop, then the staged photo. Start the World Labs experiment (below) only after the core flow works end to end.
 
 The demo is ready when the following checks pass:
 
@@ -152,7 +169,7 @@ The demo is ready when the following checks pass:
 
 | Time | What to show |
 | --- | --- |
-| 0:00–0:15 | An empty listing photo and the renter's needs |
+| 0:00–0:15 | An empty-room photo and the renter's needs (cheaper studio vs a pricier one-bedroom, works from home, a friend who uses a wheelchair) |
 | 0:15–0:35 | Confirmed dimensions, furniture requirements, and style |
 | 0:35–1:00 | Two arrangements, a rejected oversized sofa, and the corrected layout |
 | 1:00–1:30 | Walk through the selected design and compare with the original |

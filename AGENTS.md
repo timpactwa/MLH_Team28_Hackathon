@@ -2,8 +2,9 @@
 
 Read this before doing anything in the repo.
 
-## Source of truth
-- **[INTERIOR_DESIGN_PLAN.md](INTERIOR_DESIGN_PLAN.md):** the product, scope, architecture and open decisions. A task checklist (`TASKS.md`) will be regenerated once the open decisions are locked.
+## Sources of truth
+- **[TASKS.md](TASKS.md):** what to work on, and the claim protocol for parallel agents. Every change maps to a task ID.
+- **[INTERIOR_DESIGN_PLAN.md](INTERIOR_DESIGN_PLAN.md):** the product, scope, architecture and open decisions. Locked decisions D1–D10.
 
 ## Workflow
 1. `git pull --rebase` before starting.
