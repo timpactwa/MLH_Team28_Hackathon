@@ -158,13 +158,15 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
 - notes: `components/viewer/RoomViewer.tsx` (load it with `next/dynamic`, `ssr: false`) and `walker.ts`. Furniture renders as boxes until the T-202 models land. Violating items are red. Polish for T-306: a cutaway of the near wall in overview.
 
 ### T-303 · Main flow UI
-- status: claimed by tim/claude @ 2026-10-24 15:40
+- status: review: done except the photo path, which waits on T-102 (tim/claude)
 - deps: T-301, T-302, T-103
-- paths: `app/(app)/page.tsx`, `components/flow/`
+- paths: `app/(app)/page.tsx`, `components/flow/`, read-only mode in `components/editor/PlanView.tsx`
 - done when:
-  - [ ] Photo or prepared example → confirm the room → needs + style → 2 layouts compared side by side → pick one → tour
-  - [ ] A rejected layout shows the violation and the revision, clearly
-  - [ ] Loading, error and "doesn't fit" states are designed
+  - [ ] Photo or prepared example → confirm the room → needs + style → 2 layouts compared side by side → pick one → tour (everything works except the photo start, which waits on T-102)
+  - [x] A rejected layout shows the violation and the revision, clearly
+  - [x] Loading, error and "doesn't fit" states are designed
+
+- notes: `/` runs the flow. Steps: pick the example studio or your own room, confirm the measurements (continuing marks them confirmed), needs (Gemma reads free text into an editable list; you can also build the list by hand), two options side by side, each with a "How it got here" list of every checker round, then the editor, 3D view and text summary. Without a key, `/api/*` returns 503 and the UI offers the non-AI paths: the prepared reading of the example needs, the prepared example plan (hand-written layouts, checked live, labeled as such; only for the example room and furniture, see `exampleApplies`), and "Arrange it myself" (`autoPlace`). T-102: add a photo card to `StartStep.tsx` that produces an estimated `Room` and goes to the room step. Verified with Playwright plus axe (clean at 1440 and 390 wide).
 
 ### T-304 · Compare views (layers b/c)
 - status: open
@@ -175,12 +177,14 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
   - [ ] Labels: "AI concept, not to scale. The 3D plan is what we checked."
 
 ### T-305 · Accessible summary (never cut)
-- status: claimed by tim/claude @ 2026-10-24 15:40
+- status: review: built and checked with axe; needs a real screen-reader pass (NVDA or VoiceOver) by a human (tim/claude)
 - deps: T-303
 - paths: `components/summary/`
 - done when:
-  - [ ] Non-3D text summary of the layout: items, positions, clearances, what's estimated vs confirmed, limits
+  - [x] Non-3D text summary of the layout: items, positions, clearances, what's estimated vs confirmed, limits
   - [ ] Screen-reader and keyboard tested; contrast checked; printable
+
+- notes: `LayoutSummary` sits under the editor (a skip link jumps to it) and updates live. It lists the room with estimated or confirmed per value, each opening, each item's size, position and orientation, the requested clear space, problems, and limits. "Print summary" prints only the summary. Phrases are in `describe.ts`, with tests. Still to do: an NVDA/VoiceOver pass by a person.
 
 ### T-306 · UI/UX polish pass
 - status: open

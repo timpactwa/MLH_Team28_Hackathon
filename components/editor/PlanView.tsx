@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, type KeyboardEvent, type PointerEvent } from "react";
+import { useId, useRef, type KeyboardEvent, type PointerEvent } from "react";
 import { catalogById } from "@/data/catalog";
 import { doorClearance, doorSwing, footprint, span, wallPoint } from "@/lib/geometry";
 import type { CheckResult, ClearanceRequirement, Opening, Placement, Room } from "@/lib/schema";
@@ -18,17 +18,22 @@ interface Props {
   clearances: ClearanceRequirement[];
   result: CheckResult;
   selectedId: string | null;
-  dispatch: React.Dispatch<EditorAction>;
+  /** Omit for a read-only thumbnail: no focus, no dragging. */
+  dispatch?: React.Dispatch<EditorAction>;
+  /** Accessible name for a read-only plan. */
+  label?: string;
 }
 
 /** Top-down plan in inches. Furniture can be dragged, or moved with the keyboard. */
-export function PlanView({ room, placements, clearances, result, selectedId, dispatch }: Props) {
+export function PlanView({ room, placements, clearances, result, selectedId, dispatch, label }: Props) {
   const svgRef = useRef<SVGSVGElement>(null);
+  const gridId = useId();
   const drag = useRef<{ id: string; dx: number; dy: number } | null>(null);
   const W = room.width.value;
   const D = room.depth.value;
   const bad = violatingIds(result);
   const doorDepth = clearances.find((c) => c.kind === "door_clearance")?.depth;
+  const interactive = dispatch !== undefined;
 
   function toRoom(e: PointerEvent): { x: number; y: number } {
     const svg = svgRef.current!;
@@ -43,16 +48,17 @@ export function PlanView({ room, placements, clearances, result, selectedId, dis
     const at = toRoom(e);
     drag.current = { id: p.id, dx: at.x - p.x, dy: at.y - p.y };
     e.currentTarget.setPointerCapture(e.pointerId);
-    dispatch({ type: "select", id: p.id });
+    dispatch?.({ type: "select", id: p.id });
   }
 
   function onPointerMove(e: PointerEvent<SVGGElement>) {
     if (!drag.current) return;
     const at = toRoom(e);
-    dispatch({ type: "movePlacement", id: drag.current.id, x: at.x - drag.current.dx, y: at.y - drag.current.dy });
+    dispatch?.({ type: "movePlacement", id: drag.current.id, x: at.x - drag.current.dx, y: at.y - drag.current.dy });
   }
 
   function onKeyDown(e: KeyboardEvent<SVGGElement>, p: Placement) {
+    if (!dispatch) return;
     const step = e.shiftKey ? 12 : 1;
     const moves: Record<string, [number, number]> = {
       ArrowLeft: [-step, 0],
@@ -76,18 +82,18 @@ export function PlanView({ room, placements, clearances, result, selectedId, dis
     <svg
       ref={svgRef}
       viewBox={`${-PAD} ${-PAD} ${W + PAD * 2} ${D + PAD * 2}`}
-      className="h-full w-full touch-none select-none"
-      role="group"
-      aria-label={`Floor plan, ${feetInches(W)} by ${feetInches(D)}. Select an item, then use arrow keys to move it (Shift for 1 foot steps), R to rotate, Delete to remove.`}
+      className={`h-full w-full select-none ${interactive ? "touch-none" : ""}`}
+      role={interactive ? "group" : "img"}
+      aria-label={label ?? `Floor plan, ${feetInches(W)} by ${feetInches(D)}. Select an item, then use arrow keys to move it (Shift for 1 foot steps), R to rotate, Delete to remove.`}
     >
       <defs>
-        <pattern id="grid" width="12" height="12" patternUnits="userSpaceOnUse">
+        <pattern id={gridId} width="12" height="12" patternUnits="userSpaceOnUse">
           <path d="M 12 0 L 0 0 0 12" fill="none" stroke="currentColor" strokeOpacity="0.08" strokeWidth="0.5" />
         </pattern>
       </defs>
 
       <rect x={0} y={0} width={W} height={D} className="fill-stone-50" />
-      <rect x={0} y={0} width={W} height={D} fill="url(#grid)" className="text-stone-900" />
+      <rect x={0} y={0} width={W} height={D} fill={`url(#${gridId})`} className="text-stone-900" />
 
       {doorDepth !== undefined &&
         room.openings
@@ -149,16 +155,16 @@ export function PlanView({ room, placements, clearances, result, selectedId, dis
         return (
           <g
             key={p.id}
-            role="button"
-            tabIndex={0}
-            aria-pressed={isSel}
-            aria-label={`${item.name} at ${feetInches(p.x)} from the west wall, ${feetInches(p.y)} from the north wall, rotated ${p.rotation} degrees. ${problems.length ? `Problem: ${problems.join(" ")}` : "No problems."}`}
-            className="cursor-grab outline-none active:cursor-grabbing [&:focus-visible>rect]:stroke-[2.5]"
-            onPointerDown={(e) => onPointerDown(e, p)}
-            onPointerMove={onPointerMove}
-            onPointerUp={() => (drag.current = null)}
-            onFocus={() => dispatch({ type: "select", id: p.id })}
-            onKeyDown={(e) => onKeyDown(e, p)}
+            role={interactive ? "button" : undefined}
+            tabIndex={interactive ? 0 : undefined}
+            aria-pressed={interactive ? isSel : undefined}
+            aria-label={interactive ? `${item.name} at ${feetInches(p.x)} from the west wall, ${feetInches(p.y)} from the north wall, rotated ${p.rotation} degrees. ${problems.length ? `Problem: ${problems.join(" ")}` : "No problems."}` : undefined}
+            className={interactive ? "cursor-grab outline-none active:cursor-grabbing [&:focus-visible>rect]:stroke-[2.5]" : undefined}
+            onPointerDown={interactive ? (e) => onPointerDown(e, p) : undefined}
+            onPointerMove={interactive ? onPointerMove : undefined}
+            onPointerUp={interactive ? () => (drag.current = null) : undefined}
+            onFocus={interactive ? () => dispatch({ type: "select", id: p.id }) : undefined}
+            onKeyDown={interactive ? (e) => onKeyDown(e, p) : undefined}
           >
             <rect
               x={r.minX}

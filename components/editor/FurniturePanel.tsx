@@ -7,8 +7,8 @@ import { feetInches } from "./format";
 import type { EditorAction } from "./useRoomEditor";
 
 /** A 60 in diameter turning space is the ADA 2010 Standards figure (section 304.3.1). */
-const TURNING: ClearanceRequirement = { kind: "turning_circle", diameter: 60 };
-const DOOR_CLEAR: ClearanceRequirement = { kind: "door_clearance", depth: 48 };
+export const TURNING: ClearanceRequirement = { kind: "turning_circle", diameter: 60 };
+export const DOOR_CLEAR: ClearanceRequirement = { kind: "door_clearance", depth: 48 };
 
 /** Same-category items that are smaller than this one, smallest footprint last. */
 function smallerOptions(itemId: string) {
