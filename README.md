@@ -76,7 +76,7 @@ Sample needs to try with a key:
 ## Responsible AI
 
 - **Estimated vs confirmed.** Every dimension carries its source. Estimates from a photo or from our defaults look different (dashed amber, "Estimated") until you confirm them, and the summary counts how many are still estimated.
-- **No certification claims.** We say a layout "passed the checks against the room you confirmed". We never say accessible, compliant or certified. Gemma's explanations are rejected and replaced with a template if they use those words, or if they contain any number that isn't in the room, the catalog or the checker's results.
+- **No certification claims.** We say a layout "passed the checks against the room you confirmed". We never say accessible, compliant or certified. Gemma is told the same, and its explanations are replaced with a template if they say "certified", "compliant" or "up to code", or if they contain any number that isn't in the room, the catalog or the checker's results.
 - **What the checks don't cover.** They cover footprints only. The turning circle is checked for floor space, not for a clear path to it. Furniture sizes are typical retail sizes. The summary lists these limits.
 - **Photos.** The browser downscales and re-encodes the photo, which removes EXIF data including GPS. It is sent inline to Google's Gemini API, never uploaded to the Files API, and never written to disk or logged by our server. Logs hold only the call label, model, latency and token counts. Google's API terms cover what happens on their side, and we say so in the UI.
 - **Generated views.** Staged photos and 3D worlds (T-403, T-404) are labeled as design concepts, not to scale. The 3D room built from the checked plan is the one we stand behind.
