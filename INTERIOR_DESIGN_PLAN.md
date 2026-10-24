@@ -113,7 +113,7 @@ An attractive tour alone leaves much of this rubric unanswered. The constraint d
 
 The official Virginia Tech event page lists Best Open-Source AI Project and Best Use of Gemma 4 for Saturday. It lists Best Use of Gemini API, Best AI Agent, and GDG AI for Good: Housing for Sunday.
 
-The team selection recorded in `AGENTS.md` is Best Use of Gemma 4 for MLH, plus GDG AI for Good: Housing. This proposal does not change that selection. Gemini image generation does not establish use of Gemma. Give Gemma a substantive planning or revision role and confirm the available model's capabilities. If the product cannot support that role, propose a change in the team chat. Do not add an agent solely to claim an agent track.
+The previous plan selected Gemma. Reassess that choice for this product. Gemini image generation does not establish use of Gemma. If the team selects the Gemma track, give Gemma a substantive planning or revision role and confirm the available model's capabilities. Do not add an agent solely to claim an agent track.
 
 The old plan records a public repository, an open-source license, a two-minute video, separate MLH and Virginia Tech housing submissions, and a Sunday 11:00 AM–12:30 PM submission window. These requirements, the timezone, and permitted track combinations need confirmation from the event deck. Do not carry forward the old track selection as a confirmed rule for this pivot.
 
