@@ -10,6 +10,47 @@ import { violatingIds, type EditorAction } from "./useRoomEditor";
 const PAD = 30;
 const WALL = 4;
 
+/** Rough width of one character as a fraction of the font size, for Geist at small sizes. */
+const CHAR = 0.56;
+const LABEL_MAX = 5.5;
+const LABEL_MIN = 3;
+
+export interface LabelFit {
+  lines: string[];
+  size: number;
+  vertical: boolean;
+}
+
+/** Splits at the space nearest the middle: "Two-seat bistro table" -> ["Two-seat", "bistro table"]. */
+function twoLines(text: string): string[] {
+  const spaces = [...text.matchAll(/ /g)].map((m) => m.index!);
+  if (!spaces.length) return [text];
+  const cut = spaces.reduce((best, i) => (Math.abs(i - text.length / 2) < Math.abs(best - text.length / 2) ? i : best));
+  return [text.slice(0, cut), text.slice(cut + 1)];
+}
+
+/**
+ * The largest label that fits inside a w x h box: one or two lines, horizontal or turned to run along a tall box.
+ * Never smaller than LABEL_MIN, so very small boxes may still overflow slightly.
+ */
+export function fitLabel(text: string, w: number, h: number): LabelFit {
+  let best: LabelFit = { lines: [text], size: 0, vertical: false };
+  for (const lines of [[text], twoLines(text)]) {
+    const longest = Math.max(...lines.map((l) => l.length));
+    for (const vertical of [false, true]) {
+      const [along, across] = vertical ? [h, w] : [w, h];
+      const size = Math.min(LABEL_MAX, (along - 3) / (longest * CHAR), (across - 2) / (lines.length * 1.15));
+      // Prefer one line and horizontal text unless the alternative is clearly bigger.
+      const bonus = (lines.length === 1 ? 0.4 : 0) + (vertical ? 0 : 0.3);
+      if (size + bonus > best.size + (best.lines.length === 1 ? 0.4 : 0) + (best.vertical ? 0 : 0.3)) best = { lines, size, vertical };
+    }
+  }
+  return { ...best, size: Math.max(LABEL_MIN, best.size) };
+}
+
+/** "Loveseat (small sofa)" -> "Loveseat". */
+const shortName = (name: string) => name.replace(/\s*\(.*\)$/, "");
+
 const INWARD = { north: [0, 1], south: [0, -1], west: [1, 0], east: [-1, 0] } as const;
 
 interface Props {
@@ -182,16 +223,30 @@ export function PlanView({ room, placements, clearances, result, selectedId, dis
               strokeWidth={isSel ? 1.75 : 1}
               strokeDasharray={isBad ? "4 2" : undefined}
             />
-            <text
-              x={(r.minX + r.maxX) / 2}
-              y={(r.minY + r.maxY) / 2}
-              textAnchor="middle"
-              dominantBaseline="middle"
-              className={`pointer-events-none text-[5.5px] ${isBad ? "fill-red-800" : "fill-stone-700"}`}
-            >
-              {isBad ? "⚠ " : ""}
-              {item.name}
-            </text>
+            {(() => {
+              const cx = (r.minX + r.maxX) / 2;
+              const cy = (r.minY + r.maxY) / 2;
+              const label = `${isBad ? "⚠ " : ""}${shortName(item.name)}`;
+              const fit = fitLabel(label, r.maxX - r.minX, r.maxY - r.minY);
+              return (
+                <text
+                  x={cx}
+                  y={cy - ((fit.lines.length - 1) * fit.size * 1.15) / 2}
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                  fontSize={fit.size}
+                  transform={fit.vertical ? `rotate(-90 ${cx} ${cy})` : undefined}
+                  className={`pointer-events-none ${isBad ? "fill-red-800 font-medium" : "fill-stone-700"}`}
+                >
+                  {fit.lines.map((line, i) => (
+                    <tspan key={i} x={cx} dy={i === 0 ? 0 : fit.size * 1.15}>
+                      {/* The leading space keeps the words apart in the accessible text. */}
+                      {i === 0 ? line : ` ${line}`}
+                    </tspan>
+                  ))}
+                </text>
+              );
+            })()}
           </g>
         );
       })}

@@ -187,11 +187,13 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
 - notes: `LayoutSummary` sits under the editor (a skip link jumps to it) and updates live. It lists the room with estimated or confirmed per value, each opening, each item's size, position and orientation, the requested clear space, problems, and limits. "Print summary" prints only the summary. Phrases are in `describe.ts`, with tests. Still to do: an NVDA/VoiceOver pass by a person.
 
 ### T-306 · UI/UX polish pass
-- status: claimed by tim/claude @ 2026-10-24 16:10
+- status: review: first pass done; the team should look it over (tim/claude)
 - deps: T-303
 - paths: `app/globals.css`, `components/ui/`
 - done when:
-  - [ ] Consistent visual design and focus states; Lighthouse accessibility ≥ 95
+  - [x] Consistent visual design and focus states; Lighthouse accessibility ≥ 95
+
+- notes: light-only theme (the old dark-mode block put light text on light panels), Geist everywhere, one amber focus ring in `globals.css`. Plan labels drop the bracketed part of the name, wrap to two lines, or turn to run along tall boxes (`fitLabel`, tested). 3D overview: walls between the camera and the room drop to a 10 in stub. Lighthouse on the production build: accessibility 100 and best practices 100 on `/` and `/editor`, performance 90 to 93. axe is clean on every flow step at 1440 and 390 wide. `/editor` links back to the guided flow.
 
 ---
 

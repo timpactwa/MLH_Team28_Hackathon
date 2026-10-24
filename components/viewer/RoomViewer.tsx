@@ -78,33 +78,66 @@ function pieceBox(room: Room, wall: Wall, p: Piece): { pos: [number, number, num
   }
 }
 
-function Walls({ room }: { room: Room }) {
-  const walls: Wall[] = ["north", "east", "south", "west"];
+/** Height (inches) a wall drops to in the overview when it stands between the camera and the room. */
+const CUTAWAY = 10;
+
+/** True when the camera is on the outside of `wall`, so the wall would block the view in. */
+function outside(wall: Wall, cam: THREE.Vector3, W: number, D: number): boolean {
+  switch (wall) {
+    case "north":
+      return cam.z < 0;
+    case "south":
+      return cam.z > D * IN;
+    case "west":
+      return cam.x < 0;
+    case "east":
+      return cam.x > W * IN;
+  }
+}
+
+function WallGroup({ room, wall, cutaway }: { room: Room; wall: Wall; cutaway: boolean }) {
+  const ref = useRef<THREE.Group>(null);
+  const low = Math.min(1, CUTAWAY / room.height.value);
+  useFrame(({ camera }) => {
+    if (!ref.current) return;
+    const cut = cutaway && outside(wall, camera.position, room.width.value, room.depth.value);
+    ref.current.scale.y = cut ? low : 1;
+  });
   return (
-    <group>
-      {walls.flatMap((wall) =>
-        wallPieces(room, wall).map((p, i) => {
-          const b = pieceBox(room, wall, p);
-          return (
-            <mesh key={`${wall}-${i}`} position={b.pos} castShadow receiveShadow>
-              <boxGeometry args={b.size} />
-              <meshStandardMaterial color="#f3efe8" />
-            </mesh>
-          );
-        }),
-      )}
+    <group ref={ref}>
+      {wallPieces(room, wall).map((p, i) => {
+        const b = pieceBox(room, wall, p);
+        return (
+          <mesh key={i} position={b.pos} castShadow receiveShadow>
+            <boxGeometry args={b.size} />
+            <meshStandardMaterial color="#f3efe8" />
+          </mesh>
+        );
+      })}
       {room.openings
-        .filter((o) => o.kind === "window")
+        .filter((o) => o.kind === "window" && o.wall === wall)
         .map((o) => {
           const [s, e] = span(o);
-          const b = pieceBox(room, o.wall, { a0: s, a1: e, h0: WINDOW_SILL, h1: Math.min(WINDOW_HEAD, room.height.value) });
+          const b = pieceBox(room, wall, { a0: s, a1: e, h0: WINDOW_SILL, h1: Math.min(WINDOW_HEAD, room.height.value) });
           return (
             <mesh key={o.id} position={b.pos}>
-              <boxGeometry args={[b.size[0] * (o.wall === "east" || o.wall === "west" ? 0.2 : 1), b.size[1], b.size[2] * (o.wall === "north" || o.wall === "south" ? 0.2 : 1)]} />
+              <boxGeometry args={[b.size[0] * (wall === "east" || wall === "west" ? 0.2 : 1), b.size[1], b.size[2] * (wall === "north" || wall === "south" ? 0.2 : 1)]} />
               <meshStandardMaterial color="#bfe3f5" transparent opacity={0.35} />
             </mesh>
           );
         })}
+    </group>
+  );
+}
+
+/** In the overview, walls between the camera and the room drop to a low stub so you can see in. */
+function Walls({ room, cutaway }: { room: Room; cutaway: boolean }) {
+  const walls: Wall[] = ["north", "east", "south", "west"];
+  return (
+    <group>
+      {walls.map((wall) => (
+        <WallGroup key={wall} room={room} wall={wall} cutaway={cutaway} />
+      ))}
     </group>
   );
 }
@@ -254,7 +287,7 @@ export default function RoomViewer({ room, placements, violating }: Props) {
           <planeGeometry args={[W, D]} />
           <meshStandardMaterial color="#d9c7ad" roughness={0.9} />
         </mesh>
-        <Walls room={room} />
+        <Walls room={room} cutaway={mode === "overview"} />
         <Furniture placements={placements} violating={violating} />
         {mode === "overview" ? (
           <OrbitControls target={center} maxPolarAngle={Math.PI / 2.1} enableDamping={!reducedMotion} />
