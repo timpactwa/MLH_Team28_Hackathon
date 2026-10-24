@@ -113,7 +113,7 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
   - [x] CC0 low-poly models (e.g. the Kenney furniture kit) scaled to the catalog dimensions; licenses recorded in `public/models/LICENSES.md`
 
 ### T-203 · Demo room fixture
-- status: open
+- status: claimed by tim/claude @ 2026-10-24 13:15
 - deps: T-001, T-406
 - paths: `data/demo-room.json`
 - done when:
@@ -129,7 +129,7 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
 ## Lane 3: frontend / UX (Tim)
 
 ### T-301 · Room editor + 2D plan
-- status: open
+- status: claimed by tim/claude @ 2026-10-24 13:15
 - deps: T-001, T-201
 - paths: `app/(app)/editor/`, `components/editor/`
 - done when:
@@ -139,7 +139,7 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
   - [ ] Fully keyboard-operable
 
 ### T-302 · 3D room walkthrough (core layer a, never cut)
-- status: open
+- status: claimed by tim/claude @ 2026-10-24 13:15
 - deps: T-001, T-202
 - paths: `components/viewer/`
 - done when:
