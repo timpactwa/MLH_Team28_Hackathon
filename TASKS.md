@@ -200,13 +200,15 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
 ## Lane 4: visuals + ship (P4)
 
 ### T-401 · Cloud Run hello-world
-- status: claimed by tim/claude @ 2026-10-24 16:45 (Dockerfile and DEPLOY.md only; the deploy stays with a human)
+- status: review: Dockerfile and DEPLOY.md written; needs a human to build the image, create the secret, deploy, and confirm credits (tim/claude)
 - deps: T-002
 - paths: `Dockerfile`, `.dockerignore`, `docs/DEPLOY.md`
 - done when:
   - [ ] Standalone Next.js build in a container; deployed to Cloud Run **by a human**
   - [ ] `GEMINI_API_KEY` held in Secret Manager
   - [ ] Confirm which APIs the $25 credits cover (Cloud Run; Gemini API billing) and record it in DEPLOY.md
+
+- notes: the standalone server was checked locally (pages, static assets, 503 without a key). The Docker image itself is untested here because Docker Desktop was not running. `docs/DEPLOY.md` has the exact gcloud commands (Secret Manager, `gcloud run deploy --source .`, timeout 300, max 3 instances) and the open billing questions.
 
 ### T-402 · Deploy the full app
 - status: open
