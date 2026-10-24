@@ -62,13 +62,13 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
 ## Lane 1: AI (P2)
 
 ### T-101 · Gemma client and the needs → furniture call
-- status: claimed by tim/claude @ 2026-10-24 14:00
+- status: review: code and stub tests done; needs a live run with GEMINI_API_KEY (tim/claude)
 - deps: T-001, T-002
-- paths: `lib/ai/gemma.ts`, `lib/ai/prompts/needs.ts`, `app/api/needs/route.ts`
+- paths: `lib/ai/gemma.ts`, `lib/ai/model.ts`, `lib/ai/http.ts`, `lib/ai/needs.ts`, `lib/ai/prompts/needs.ts`, `app/api/needs/route.ts`
 - done when:
   - [ ] Confirm the Gemma 4 model ID available to our key and record it in `.env.example`
-  - [ ] Free text → catalog item IDs + clearance requirements; Zod-validated, so unknown items are rejected
-  - [ ] Timeout and one retry; errors return a useful message
+  - [x] Free text → catalog item IDs + clearance requirements; Zod-validated, so unknown items are rejected
+  - [x] Timeout and one retry; errors return a useful message
 
 ### T-102 · Photo → estimated room (cut #3)
 - status: open
@@ -80,15 +80,19 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
   - [ ] Works on the demo photo (T-406)
 
 ### T-103 · Propose → check → revise loop (never cut)
-- status: claimed by tim/claude @ 2026-10-24 14:00
+- status: review: code and stub tests done; needs a live run with GEMINI_API_KEY (tim/claude)
 - deps: T-101, T-201
 - paths: `lib/ai/planner.ts`, `lib/ai/prompts/layout.ts`, `app/api/plan/route.ts`
 - done when:
-  - [ ] Gemma proposes 2 layouts as JSON; every placement goes through `lib/geometry` checks
-  - [ ] Violations go back to Gemma as specific errors; at most 2 revision rounds
-  - [ ] A layout that still fails is returned as "doesn't fit" with the reasons, never shown as passing
-  - [ ] Plain-language tradeoff explanation per layout; it may only cite numbers from the checker result
-  - [ ] Token usage and latency are logged per request (feeds T-408)
+  - [x] Gemma proposes 2 layouts as JSON; every placement goes through `lib/geometry` checks
+  - [x] Violations go back to Gemma as specific errors; at most 2 revision rounds
+  - [x] A layout that still fails is returned as "doesn't fit" with the reasons, never shown as passing
+  - [x] Plain-language tradeoff explanation per layout; it may only cite numbers from the checker result
+  - [x] Token usage and latency are logged per request (feeds T-408)
+
+- notes: `createGemmaCall()` sends the system prompt as the first user part, because Gemma may not take a system instruction. Images go inline. It logs only label, model, latency and tokens. `generateJson` validates with Zod and retries once with the error. To finish: put the key in `.env.local`, run `curl -X POST localhost:3000/api/needs -d '{"text":"..."}'`, and confirm the model ID.
+
+- notes: `planLayouts(call, { room, needs, catalog })` returns options with `status`, `attempts[]` (every round with its check result, for the rejection-then-fix UI), `explanation` and `explanationSource`. If the explanation contains any number not found in room, item or checker facts, or the words "certified" or "compliant", the template explanation is used instead. `POST /api/plan { room, needs }`. Live prompt quality is untested until there is a key.
 
 ---
 
@@ -269,3 +273,4 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
 - 2026-10-24: T-002 done. Scaffold builds; `npm run typecheck && npm test` pass.
 - 2026-10-24: T-001 and T-201 done (16 tests). T-202 catalog data done; models still to do.
 - 2026-10-24: T-203, T-301, T-302 done. `/editor` has the live-checked 2D plan and the 3D overview and walk-through (20 tests).
+- 2026-10-24: T-101 and T-103 code done, 25 tests passing with a scripted model stub. Both wait on GEMINI_API_KEY for a live run.
