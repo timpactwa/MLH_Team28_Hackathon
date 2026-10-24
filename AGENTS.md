@@ -16,3 +16,13 @@ Read this before doing anything in the repo.
 - Label generated images and 3D views as design concepts. Mark every dimension as user-supplied or estimated.
 - Secrets (API keys) come from the environment, never committed. Don't log user photos.
 - Agents: don't send emails, submit, or deploy without a human's explicit go-ahead.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+## This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

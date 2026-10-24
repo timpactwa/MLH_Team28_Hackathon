@@ -45,14 +45,15 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
   - [ ] Exported TS types, plus JSON Schema output for Gemma structured output
 
 ### T-002 · Repo scaffold
-- status: claimed by tim/claude @ 2026-10-24
+- status: done (tim/claude)
 - owner lane: Tim
-- paths: `package.json`, `app/layout.tsx`, `tsconfig.json`, `LICENSE`, `.gitignore`, `.env.example`, `vitest.config.ts`
+- paths: `package.json`, `package-lock.json`, `app/layout.tsx`, `app/favicon.ico`, `tsconfig.json`, `next.config.ts`, `eslint.config.mjs`, `LICENSE`, `.gitignore`, `.env.example`, `vitest.config.ts`, `lib/scaffold.test.ts`; initial `app/globals.css` (now T-306) and placeholder `app/(app)/page.tsx` (now T-303)
 - done when:
-  - [ ] Next.js (App Router) + TS + Tailwind + R3F + drei + zod + `@google/genai` + vitest installed
-  - [ ] MIT `LICENSE` file at the root
-  - [ ] `npm run dev`, `typecheck`, `test` all work
-  - [ ] `.env.example` lists `GEMINI_API_KEY`, `WORLDLABS_API_KEY`; `.env*` is gitignored
+  - [x] Next.js 16.4 (App Router) + TS + Tailwind 4 + R3F 9 + drei 10 + three + zod 4 + `@google/genai` + vitest 5 installed
+  - [x] MIT `LICENSE` file at the root
+  - [x] `npm run dev`, `typecheck`, `test` (and `lint`, `build`) all work
+  - [x] `.env.example` lists `GEMINI_API_KEY`, `GEMMA_MODEL`, `WORLDLABS_API_KEY`; `.env*` is gitignored except `.env.example`
+- notes: `next.config.ts` sets `output: "standalone"` for the Cloud Run container (T-401). Next 16 re-adds its agent-rules block to AGENTS.md on `next dev`, so it is committed there. The page title is "Room Fit (working title)" until a product name is chosen.
 
 ---
 
@@ -253,3 +254,4 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
 
 ## Changelog (append-only, one line each)
 - 2026-10-24: TASKS.md regenerated for the interior design pivot after the grilling session (D1–D10 locked).
+- 2026-10-24: T-002 done. Scaffold builds; `npm run typecheck && npm test` pass.
