@@ -33,16 +33,16 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
 ## Lane 0: contracts (do these first)
 
 ### T-001 · Shared Zod schema
-- status: claimed by tim/claude @ 2026-10-24 13:00
+- status: done (tim/claude)
 - owner lane: P3
 - paths: `lib/schema/`
 - done when:
-  - [ ] `Room` (width, depth, height in inches; walls; openings: door/window with wall, offset, width, door swing)
-  - [ ] Each dimension carries `source: "estimated" | "confirmed"`
-  - [ ] `CatalogItem` (id, name, w/d/h, model path, tags) and `Placement` (itemId, x, y, rotation in 0/90/180/270)
-  - [ ] `Layout` (placements[], rationale) and `CheckResult` (ok, violations[] with code, items, message, overlap_in)
-  - [ ] `Needs` (free text plus a structured list) and `ClearanceRequirement` (e.g. a 60 in turning circle)
-  - [ ] Exported TS types, plus JSON Schema output for Gemma structured output
+  - [x] `Room` (width, depth, height in inches; walls; openings: door/window with wall, offset, width, door swing)
+  - [x] Each dimension carries `source: "estimated" | "confirmed"`
+  - [x] `CatalogItem` (id, name, w/d/h, model path, tags) and `Placement` (itemId, x, y, rotation in 0/90/180/270)
+  - [x] `Layout` (placements[], rationale) and `CheckResult` (ok, violations[] with code, items, message, overlap_in)
+  - [x] `Needs` (free text plus a structured list) and `ClearanceRequirement` (e.g. a 60 in turning circle)
+  - [x] Exported TS types, plus JSON Schema output for Gemma structured output
 
 ### T-002 · Repo scaffold
 - status: done (tim/claude)
@@ -54,6 +54,8 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
   - [x] `npm run dev`, `typecheck`, `test` (and `lint`, `build`) all work
   - [x] `.env.example` lists `GEMINI_API_KEY`, `GEMMA_MODEL`, `WORLDLABS_API_KEY`; `.env*` is gitignored except `.env.example`
 - notes: `next.config.ts` sets `output: "standalone"` for the Cloud Run container (T-401). Next 16 re-adds its agent-rules block to AGENTS.md on `next dev`, so it is committed there. The page title is "Room Fit (working title)" until a product name is chosen.
+
+- notes: import from `@/lib/schema`. All lengths in inches; origin is the NW corner, x east, y south; placements are footprint centers. `toJsonSchema(schema)` produces the JSON Schema for model output (rotation is an enum of 0/90/180/270).
 
 ---
 
@@ -93,30 +95,34 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
 ## Lane 2: geometry + data (P3)
 
 ### T-201 · Geometry checks (never cut)
-- status: claimed by tim/claude @ 2026-10-24 13:00
+- status: done (tim/claude)
 - deps: T-001
 - paths: `lib/geometry/`, `lib/geometry/*.test.ts`
 - done when:
-  - [ ] Checks: out of bounds, footprint overlap (rotated), blocks a door swing, inside doorway clearance, turning-circle space available
-  - [ ] Pure functions, no I/O; they run both in the browser and on the server
-  - [ ] Violations include an overlap distance in inches
-  - [ ] Tests include the demo case: an oversized sofa over the door fails and the smaller sofa passes
+  - [x] Checks: out of bounds, footprint overlap (rotated), blocks a door swing, inside doorway clearance, turning-circle space available
+  - [x] Pure functions, no I/O; they run both in the browser and on the server
+  - [x] Violations include an overlap distance in inches
+  - [x] Tests include the demo case: an oversized sofa over the door fails and the smaller sofa passes
 
 ### T-202 · Furniture catalog
-- status: claimed by tim/claude @ 2026-10-24 13:00
+- status: done (tim/claude)
 - deps: T-001
-- paths: `data/catalog.json`, `public/models/`
+- paths: `data/catalog.json`, `data/catalog.ts`, `public/models/`
 - done when:
-  - [ ] 12–20 items (bed sizes, desk, sofa S/L, dining table, chairs, dresser, shelf), each with real-world dimensions
-  - [ ] CC0 low-poly models (e.g. the Kenney furniture kit) scaled to the catalog dimensions; licenses recorded in `public/models/LICENSES.md`
+  - [x] 12–20 items (bed sizes, desk, sofa S/L, dining table, chairs, dresser, shelf), each with real-world dimensions
+  - [x] CC0 low-poly models (e.g. the Kenney furniture kit) scaled to the catalog dimensions; licenses recorded in `public/models/LICENSES.md`
 
 ### T-203 · Demo room fixture
 - status: open
 - deps: T-001, T-406
 - paths: `data/demo-room.json`
 - done when:
-  - [ ] The room for the demo photo, labeled "example dimensions, not measured"
-  - [ ] Built so that the large sofa fails at the door and the small sofa fits
+  - [x] The room for the demo photo, labeled "example dimensions, not measured"
+  - [x] Built so that the large sofa fails at the door and the small sofa fits
+
+- notes: `checkLayout({ room, placements, catalog, clearances })` from `@/lib/geometry`. Door swing is an exact quarter disc from the hinge. The turning circle returns where it fits (`turningCircle`) for drawing. It does not check that the circle is reachable from the door.
+
+- notes: 20 items, typical retail sizes (beds include about 2 in of frame). `model` is null for now, so the viewer draws boxes. The remaining work is the CC0 models.
 
 ---
 
@@ -255,3 +261,4 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
 ## Changelog (append-only, one line each)
 - 2026-10-24: TASKS.md regenerated for the interior design pivot after the grilling session (D1–D10 locked).
 - 2026-10-24: T-002 done. Scaffold builds; `npm run typecheck && npm test` pass.
+- 2026-10-24: T-001 and T-201 done (16 tests). T-202 catalog data done; models still to do.

@@ -1,0 +1,249 @@
+[
+  {
+    "id": "bed-twin",
+    "name": "Twin bed",
+    "category": "bed",
+    "width": 41,
+    "depth": 77,
+    "height": 24,
+    "model": null,
+    "tags": [
+      "sleep"
+    ]
+  },
+  {
+    "id": "bed-twin-xl",
+    "name": "Twin XL bed",
+    "category": "bed",
+    "width": 41,
+    "depth": 82,
+    "height": 24,
+    "model": null,
+    "tags": [
+      "sleep",
+      "dorm"
+    ]
+  },
+  {
+    "id": "bed-full",
+    "name": "Full bed",
+    "category": "bed",
+    "width": 56,
+    "depth": 77,
+    "height": 24,
+    "model": null,
+    "tags": [
+      "sleep"
+    ]
+  },
+  {
+    "id": "bed-queen",
+    "name": "Queen bed",
+    "category": "bed",
+    "width": 62,
+    "depth": 82,
+    "height": 24,
+    "model": null,
+    "tags": [
+      "sleep"
+    ]
+  },
+  {
+    "id": "sofa-loveseat",
+    "name": "Loveseat (small sofa)",
+    "category": "seating",
+    "width": 58,
+    "depth": 34,
+    "height": 34,
+    "model": null,
+    "tags": [
+      "lounge",
+      "compact"
+    ]
+  },
+  {
+    "id": "sofa-3seat",
+    "name": "Three-seat sofa",
+    "category": "seating",
+    "width": 84,
+    "depth": 36,
+    "height": 34,
+    "model": null,
+    "tags": [
+      "lounge"
+    ]
+  },
+  {
+    "id": "armchair",
+    "name": "Armchair",
+    "category": "seating",
+    "width": 32,
+    "depth": 34,
+    "height": 34,
+    "model": null,
+    "tags": [
+      "lounge",
+      "compact"
+    ]
+  },
+  {
+    "id": "desk-compact",
+    "name": "Compact desk",
+    "category": "desk",
+    "width": 40,
+    "depth": 20,
+    "height": 30,
+    "model": null,
+    "tags": [
+      "work",
+      "compact"
+    ]
+  },
+  {
+    "id": "desk-standard",
+    "name": "Standard desk",
+    "category": "desk",
+    "width": 48,
+    "depth": 24,
+    "height": 30,
+    "model": null,
+    "tags": [
+      "work"
+    ]
+  },
+  {
+    "id": "chair-desk",
+    "name": "Desk chair",
+    "category": "chair",
+    "width": 24,
+    "depth": 24,
+    "height": 38,
+    "model": null,
+    "tags": [
+      "work"
+    ]
+  },
+  {
+    "id": "chair-dining",
+    "name": "Dining chair",
+    "category": "chair",
+    "width": 18,
+    "depth": 20,
+    "height": 34,
+    "model": null,
+    "tags": [
+      "eat"
+    ]
+  },
+  {
+    "id": "table-bistro",
+    "name": "Two-seat bistro table",
+    "category": "table",
+    "width": 30,
+    "depth": 30,
+    "height": 30,
+    "model": null,
+    "tags": [
+      "eat",
+      "compact"
+    ]
+  },
+  {
+    "id": "table-dining-4",
+    "name": "Four-seat dining table",
+    "category": "table",
+    "width": 48,
+    "depth": 30,
+    "height": 30,
+    "model": null,
+    "tags": [
+      "eat"
+    ]
+  },
+  {
+    "id": "table-coffee",
+    "name": "Coffee table",
+    "category": "table",
+    "width": 40,
+    "depth": 20,
+    "height": 18,
+    "model": null,
+    "tags": [
+      "lounge"
+    ]
+  },
+  {
+    "id": "nightstand",
+    "name": "Nightstand",
+    "category": "storage",
+    "width": 20,
+    "depth": 16,
+    "height": 24,
+    "model": null,
+    "tags": [
+      "sleep"
+    ]
+  },
+  {
+    "id": "dresser-3",
+    "name": "Three-drawer dresser",
+    "category": "storage",
+    "width": 32,
+    "depth": 18,
+    "height": 30,
+    "model": null,
+    "tags": [
+      "storage",
+      "compact"
+    ]
+  },
+  {
+    "id": "dresser-6",
+    "name": "Six-drawer dresser",
+    "category": "storage",
+    "width": 60,
+    "depth": 18,
+    "height": 32,
+    "model": null,
+    "tags": [
+      "storage"
+    ]
+  },
+  {
+    "id": "bookshelf",
+    "name": "Bookshelf",
+    "category": "storage",
+    "width": 32,
+    "depth": 12,
+    "height": 72,
+    "model": null,
+    "tags": [
+      "storage",
+      "compact"
+    ]
+  },
+  {
+    "id": "wardrobe",
+    "name": "Wardrobe",
+    "category": "storage",
+    "width": 40,
+    "depth": 22,
+    "height": 72,
+    "model": null,
+    "tags": [
+      "storage"
+    ]
+  },
+  {
+    "id": "tv-stand",
+    "name": "TV stand",
+    "category": "storage",
+    "width": 48,
+    "depth": 16,
+    "height": 22,
+    "model": null,
+    "tags": [
+      "lounge"
+    ]
+  }
+]
