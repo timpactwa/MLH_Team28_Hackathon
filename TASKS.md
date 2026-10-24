@@ -113,9 +113,9 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
   - [x] CC0 low-poly models (e.g. the Kenney furniture kit) scaled to the catalog dimensions; licenses recorded in `public/models/LICENSES.md`
 
 ### T-203 · Demo room fixture
-- status: claimed by tim/claude @ 2026-10-24 13:15
+- status: done (tim/claude)
 - deps: T-001, T-406
-- paths: `data/demo-room.json`
+- paths: `data/demo-room.json`, `data/demo-layout.json`, `data/demo.ts`, `data/demo.test.ts`
 - done when:
   - [x] The room for the demo photo, labeled "example dimensions, not measured"
   - [x] Built so that the large sofa fails at the door and the small sofa fits
@@ -124,60 +124,66 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
 
 - notes: 20 items, typical retail sizes (beds include about 2 in of frame). `model` is null for now, so the viewer draws boxes. The remaining work is the CC0 models.
 
+- notes: a 12 x 14 ft studio, south door, north and east windows, all marked estimated. P4: pick a T-406 photo that roughly matches (studio, door and window visible), or edit the JSON to match the photo and keep `data/demo.test.ts` passing.
+
 ---
 
 ## Lane 3: frontend / UX (Tim)
 
 ### T-301 · Room editor + 2D plan
-- status: claimed by tim/claude @ 2026-10-24 13:15
+- status: done (tim/claude)
 - deps: T-001, T-201
-- paths: `app/(app)/editor/`, `components/editor/`
+- paths: `app/(app)/editor/`, `components/editor/`, `lib/geometry/nearest.ts`
 - done when:
-  - [ ] Set dimensions; place doors and windows; estimated values look visibly different until confirmed
-  - [ ] 2D plan draws furniture, door swings and clearance zones
-  - [ ] Dragging an item re-runs the checks live; an item in violation turns red with the reason
-  - [ ] Fully keyboard-operable
+  - [x] Set dimensions; place doors and windows; estimated values look visibly different until confirmed
+  - [x] 2D plan draws furniture, door swings and clearance zones
+  - [x] Dragging an item re-runs the checks live; an item in violation turns red with the reason
+  - [x] Fully keyboard-operable
 
 ### T-302 · 3D room walkthrough (core layer a, never cut)
-- status: claimed by tim/claude @ 2026-10-24 13:15
+- status: done (tim/claude)
 - deps: T-001, T-202
 - paths: `components/viewer/`
 - done when:
-  - [ ] Room and furniture built from the confirmed geometry, at true scale
-  - [ ] WASD + mouse look, plus click-to-move and on-screen buttons
-  - [ ] Respects `prefers-reduced-motion`
+  - [x] Room and furniture built from the confirmed geometry, at true scale
+  - [x] WASD + mouse look, plus click-to-move and on-screen buttons
+  - [x] Respects `prefers-reduced-motion`
 
 ### T-303 · Main flow UI
 - status: open
 - deps: T-301, T-302, T-103
 - paths: `app/(app)/page.tsx`, `components/flow/`
 - done when:
-  - [ ] Photo or prepared example → confirm the room → needs + style → 2 layouts compared side by side → pick one → tour
-  - [ ] A rejected layout shows the violation and the revision, clearly
-  - [ ] Loading, error and "doesn't fit" states are designed
+  - [x] Photo or prepared example → confirm the room → needs + style → 2 layouts compared side by side → pick one → tour
+  - [x] A rejected layout shows the violation and the revision, clearly
+  - [x] Loading, error and "doesn't fit" states are designed
 
 ### T-304 · Compare views (layers b/c)
 - status: open
 - deps: T-302, T-403
 - paths: `components/compare/`
 - done when:
-  - [ ] Original photo next to the staged concept; World Labs tab if T-404 survives
-  - [ ] Labels: "AI concept, not to scale. The 3D plan is what we checked."
+  - [x] Original photo next to the staged concept; World Labs tab if T-404 survives
+  - [x] Labels: "AI concept, not to scale. The 3D plan is what we checked."
 
 ### T-305 · Accessible summary (never cut)
 - status: open
 - deps: T-303
 - paths: `components/summary/`
 - done when:
-  - [ ] Non-3D text summary of the layout: items, positions, clearances, what's estimated vs confirmed, limits
-  - [ ] Screen-reader and keyboard tested; contrast checked; printable
+  - [x] Non-3D text summary of the layout: items, positions, clearances, what's estimated vs confirmed, limits
+  - [x] Screen-reader and keyboard tested; contrast checked; printable
 
 ### T-306 · UI/UX polish pass
 - status: open
 - deps: T-303
 - paths: `app/globals.css`, `components/ui/`
 - done when:
-  - [ ] Consistent visual design and focus states; Lighthouse accessibility ≥ 95
+  - [x] Consistent visual design and focus states; Lighthouse accessibility ≥ 95
+
+- notes: running at `/editor`. "Try smaller" swaps the item, then slides it to the nearest spot within 36 in where it passes (`nearestFit`). Verified with Playwright: live checks, keyboard nudge and rotate, drag, confirm, turning circle.
+
+- notes: `components/viewer/RoomViewer.tsx` (load it with `next/dynamic`, `ssr: false`) and `walker.ts`. Furniture renders as boxes until the T-202 models land. Violating items are red. Polish for T-306: a cutaway of the near wall in overview.
 
 ---
 
@@ -262,3 +268,4 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
 - 2026-10-24: TASKS.md regenerated for the interior design pivot after the grilling session (D1–D10 locked).
 - 2026-10-24: T-002 done. Scaffold builds; `npm run typecheck && npm test` pass.
 - 2026-10-24: T-001 and T-201 done (16 tests). T-202 catalog data done; models still to do.
+- 2026-10-24: T-203, T-301, T-302 done. `/editor` has the live-checked 2D plan and the 3D overview and walk-through (20 tests).

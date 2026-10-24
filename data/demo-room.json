@@ -1,0 +1,37 @@
+{
+  "id": "demo-studio",
+  "name": "Example studio",
+  "width": { "value": 144, "source": "estimated" },
+  "depth": { "value": 168, "source": "estimated" },
+  "height": { "value": 96, "source": "estimated" },
+  "dimensionsNote": "Example dimensions, not measured.",
+  "openings": [
+    {
+      "id": "entry",
+      "kind": "door",
+      "wall": "south",
+      "offset": { "value": 12, "source": "estimated" },
+      "width": { "value": 32, "source": "estimated" },
+      "swing": "in",
+      "hinge": "start"
+    },
+    {
+      "id": "window-north",
+      "kind": "window",
+      "wall": "north",
+      "offset": { "value": 42, "source": "estimated" },
+      "width": { "value": 60, "source": "estimated" },
+      "swing": "none",
+      "hinge": "start"
+    },
+    {
+      "id": "window-east",
+      "kind": "window",
+      "wall": "east",
+      "offset": { "value": 60, "source": "estimated" },
+      "width": { "value": 36, "source": "estimated" },
+      "swing": "none",
+      "hinge": "start"
+    }
+  ]
+}

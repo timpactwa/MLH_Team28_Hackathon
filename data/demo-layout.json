@@ -1,0 +1,13 @@
+{
+  "id": "demo-first-try",
+  "name": "First try: big sofa by the door",
+  "rationale": "Hand-made starting layout for the editor demo. The three-seat sofa sits in the door swing so the checker has something to reject.",
+  "placements": [
+    { "id": "bed", "itemId": "bed-full", "x": 28, "y": 38.5, "rotation": 0 },
+    { "id": "nightstand", "itemId": "nightstand", "x": 66, "y": 8, "rotation": 0 },
+    { "id": "desk", "itemId": "desk-compact", "x": 114, "y": 10, "rotation": 0 },
+    { "id": "desk-chair", "itemId": "chair-desk", "x": 114, "y": 34, "rotation": 0 },
+    { "id": "sofa", "itemId": "sofa-3seat", "x": 72, "y": 150, "rotation": 0 },
+    { "id": "table", "itemId": "table-bistro", "x": 125, "y": 100, "rotation": 0 }
+  ]
+}

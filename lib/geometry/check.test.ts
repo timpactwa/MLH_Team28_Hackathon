@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { catalog, catalogById } from "@/data/catalog";
 import type { Opening, Placement, Room } from "@/lib/schema";
-import { checkLayout, footprint } from "@/lib/geometry";
+import { checkLayout, footprint, nearestFit } from "@/lib/geometry";
 
 const m = (value: number) => ({ value, source: "confirmed" as const });
 
@@ -125,5 +125,20 @@ describe("checkLayout", () => {
     const r = check(studio({ swing: "out" }), placements, [{ kind: "turning_circle", diameter: 60 }]);
     expect(r.violations.map((v) => v.code)).toContain("no_turning_space");
     expect(r.turningCircle).toBeUndefined();
+  });
+});
+
+describe("nearestFit", () => {
+  it("slides the loveseat just clear of the door swing", () => {
+    const input = { room: studio(), placements: [at("sofa", "sofa-loveseat", 72, 114)], catalog: catalogById };
+    expect(check(input.room, input.placements).ok).toBe(false);
+    const spot = nearestFit(input, "sofa")!;
+    expect(spot).toEqual({ x: 73, y: 114 });
+    expect(check(input.room, [at("sofa", "sofa-loveseat", spot.x, spot.y)]).ok).toBe(true);
+  });
+
+  it("returns null when nothing nearby works", () => {
+    const tiny: Room = { ...studio(), width: m(40), depth: m(40), openings: [] };
+    expect(nearestFit({ room: tiny, placements: [at("b", "bed-queen", 20, 20)], catalog: catalogById }, "b", 5)).toBeNull();
   });
 });
