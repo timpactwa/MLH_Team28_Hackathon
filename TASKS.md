@@ -171,12 +171,14 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
 - notes: `/` runs the flow. Steps: pick the example studio or your own room, confirm the measurements (continuing marks them confirmed), needs (Gemma reads free text into an editable list; you can also build the list by hand), two options side by side, each with a "How it got here" list of every checker round, then the editor, 3D view and text summary. Without a key, `/api/*` returns 503 and the UI offers the non-AI paths: the prepared reading of the example needs, the prepared example plan (hand-written layouts, checked live, labeled as such; only for the example room and furniture, see `exampleApplies`), and "Arrange it myself" (`autoPlace`). T-102: add a photo card to `StartStep.tsx` that produces an estimated `Room` and goes to the room step. Verified with Playwright plus axe (clean at 1440 and 390 wide).
 
 ### T-304 · Compare views (layers b/c)
-- status: claimed (tim/claude)
+- status: review: photo vs concept done; World Labs tab only if T-404 survives (tim/claude)
 - deps: T-302, T-403
 - paths: `components/compare/`
 - done when:
   - [ ] Original photo next to the staged concept; World Labs tab if T-404 survives
-  - [ ] Labels: "AI concept, not to scale. The 3D plan is what we checked."
+  - [x] Labels: "AI concept, not to scale. The 3D plan is what we checked."
+
+- notes: `components/compare/ComparePanel.tsx`, shown above the editor in the tour step when the room came from a photo. Original and concept side by side, an "AI concept" badge on the image, and the required caption. Offline, 429, retry, and cache-hit states verified with Playwright; axe clean at 1440 and 390 wide.
 
 ### T-305 · Accessible summary (never cut)
 - status: review: built and checked with axe; needs a real screen-reader pass (NVDA or VoiceOver) by a human (tim/claude)
@@ -219,12 +221,14 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
   - [ ] Full flow works at the public Vercel URL; prepared example loads instantly
 
 ### T-403 · Gemini staged photo (layer b, cut #2)
-- status: claimed (tim/claude)
+- status: review: code, tests and UI done; needs a live run with a key that can output images (tim/claude)
 - deps: T-101
 - paths: `lib/ai/staging.ts`, `app/api/stage/route.ts`
 - done when:
   - [ ] Original photo + chosen style → furnished concept image; cost per image recorded
-  - [ ] Result is cached per input so the demo never pays twice
+  - [x] Result is cached per input so the demo never pays twice
+
+- notes: `lib/ai/staging.ts` (prompt, validation, tested), `lib/ai/gemini-image.ts` (the call; `STAGING_MODEL`, default `gemini-2.5-flash-image`), `app/api/stage/route.ts`. The style must be a short name and furniture names come from the catalog, so user text never reaches the image prompt. Caching is in the browser (`components/compare/cache.ts`: memory plus sessionStorage, keyed by a SHA-256 of photo, style and furniture), so the server stores nothing. Image output may need billing on the key; 403 becomes 503 and 429 becomes a clear rate-limit message. Cost per image: run `npm run measure -- --photo …` (T-408).
 
 ### T-404 · World Labs experiment (layer c, cut #1)
 - status: open
@@ -262,11 +266,13 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
 - notes: README has the pitch, how it works, a mermaid architecture diagram, setup and env vars, step-by-step demo reproduction without a key, sample needs, responsible AI, accessibility, and links. The diagram lives in the README for now rather than `docs/ARCHITECTURE.md`.
 
 ### T-408 · Cost and latency report
-- status: claimed: measurement script (tim/claude)
+- status: review: `npm run measure` and docs/COST.md ready; a human runs it with a key and pastes the numbers (tim/claude)
 - deps: T-103, T-403
 - paths: `docs/COST.md`
 - done when:
   - [ ] Measured cost per design (Gemma, staging, World Labs) and latency, with model IDs and inputs
+
+- notes: `scripts/measure.mjs` runs needs, plan, and optionally photo and stage against any URL, N times, and prints Markdown tables (calls, tokens, model and wall latency, optional cost from PRICE_IN/PRICE_OUT). Checked against a stub server. `docs/COST.md` has the method, the setup fields and the built-in limits.
 
 ### T-409 · Video + both submissions
 - status: open

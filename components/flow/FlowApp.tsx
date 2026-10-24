@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ComparePanel } from "@/components/compare/ComparePanel";
 import { EditorWorkspace } from "@/components/editor/EditorWorkspace";
 import { catalogById } from "@/data/catalog";
 import { demoRoom } from "@/data/demo";
@@ -23,7 +24,7 @@ interface Tour {
   status: "fits" | "doesnt_fit" | "manual";
 }
 
-/** The main flow (T-303): room, confirm, needs, two checked layouts, then the editor and 3D tour. */
+/** The main flow (T-303): room, confirm, needs, two checked layouts, then the editor, 3D tour and photo concept (T-304). */
 export function FlowApp() {
   const [step, setStep] = useState<Step>("start");
   const [moved, setMoved] = useState(false);
@@ -77,6 +78,11 @@ export function FlowApp() {
               {plan.kind === "ready" ? "Back to the two layouts" : "Back to your needs"}
             </button>
           </div>
+          {photo && (
+            <div className="px-4 pt-4 lg:px-8 print:hidden">
+              <ComparePanel photo={photo} style={needs.style} items={needs.items} />
+            </div>
+          )}
           <EditorWorkspace
             key={tourKey}
             initial={{ room, placements: tour.placements, clearances: needs.clearances, selectedId: null }}

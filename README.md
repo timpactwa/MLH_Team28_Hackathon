@@ -14,7 +14,7 @@ Built at GDG Build with AI x Hacktoberfest 2026 (Virginia Tech) by MLH Team 28.
 2. **Check the measurements.** Estimated values are marked until you confirm them. Every later check runs against these numbers.
 3. **Your needs.** "I use a wheelchair, I want a full bed and a small desk…" becomes an editable furniture list from a catalog with real sizes. Wheelchair use adds a 60 in turning circle.
 4. **Two layouts.** Gemma proposes. The checker looks for furniture outside the room, overlapping pieces, anything in a door's swing or in the clear space at a door, and whether a turning circle fits. It sends exact problems back ("Loveseat is in the swing of the door on the south wall by 15 in"). A layout that still fails is shown as not fitting, never as passing. Each option shows every round it went through.
-5. **Walk through.** A live-checked 2D plan you can drag or use with the keyboard, a 3D room with overview and first-person walk modes, and a text summary you can print.
+5. **Walk through.** A live-checked 2D plan you can drag or use with the keyboard, a 3D room with overview and first-person walk modes, and a text summary you can print. If you started from a photo, you can also ask for a style concept: Gemini restyles your photo with your furniture, shown next to the original and labeled "AI concept, not to scale".
 
 ```mermaid
 flowchart LR
@@ -23,6 +23,7 @@ flowchart LR
     Editor --> Viewer[3D room<br/>components/viewer]
     Editor --> Summary[Text summary<br/>components/summary]
     Editor -. same code .-> Geo
+    UI --> Compare[Photo vs AI concept<br/>components/compare]
   end
   subgraph Server["Next.js API routes (Vercel)"]
     Photo["/api/photo"] --> Gemma
@@ -30,8 +31,9 @@ flowchart LR
     Plan["/api/plan"] --> Planner[Planner loop<br/>lib/ai/planner.ts]
     Planner -- propose / revise / explain --> Gemma[(Gemma 4<br/>Gemini API)]
     Planner -- every layout --> Geo[Geometry checks<br/>lib/geometry]
+    Stage["/api/stage"] --> Gemini[(Gemini image model)]
   end
-  UI --> Photo & Needs & Plan
+  UI --> Photo & Needs & Plan & Stage
 ```
 
 The model never decides whether something fits. `lib/geometry` is pure, deterministic and unit-tested. It runs on the server to judge Gemma's layouts and in the browser to re-check every move you make.
@@ -48,13 +50,14 @@ npm run dev                  # http://localhost:3000
 
 | Variable | Needed for | Notes |
 | --- | --- | --- |
-| `GEMINI_API_KEY` | `/api/photo`, `/api/needs`, `/api/plan` | Server only. Without it those routes return 503, and the app falls back to the paths below. |
+| `GEMINI_API_KEY` | `/api/photo`, `/api/needs`, `/api/plan`, `/api/stage` | Server only. Without it those routes return 503, and the app falls back to the paths below. |
 | `GEMMA_MODEL` | same | Defaults to `gemma-4-26b-a4b-it`. |
+| `STAGING_MODEL` | `/api/stage` (style concept) | Defaults to `gemini-2.5-flash-image`. Image output may need billing on the key; without it the concept panel says it's unavailable. |
 | `WORLDLABS_API_KEY` | the World Labs experiment (T-404) | Optional. |
 
-Other scripts: `npm test` (vitest), `npm run typecheck`, `npm run lint`, `npm run build`.
+Other scripts: `npm test` (vitest), `npm run typecheck`, `npm run lint`, `npm run build`, and `npm run measure` (cost and latency per design, see [docs/COST.md](docs/COST.md)).
 
-Deploying: see [docs/DEPLOY.md](docs/DEPLOY.md). A human runs the deploy.
+Deploying: Vercel's free plan, see [docs/DEPLOY.md](docs/DEPLOY.md). A human runs the deploy.
 
 ## Reproducing the demo
 
@@ -79,7 +82,7 @@ Sample needs to try with a key:
 - **No certification claims.** We say a layout "passed the checks against the room you confirmed". We never say accessible, compliant or certified. Gemma is told the same, and its explanations are replaced with a template if they say "certified", "compliant" or "up to code", or if they contain any number that isn't in the room, the catalog or the checker's results.
 - **What the checks don't cover.** They cover footprints only. The turning circle is checked for floor space, not for a clear path to it. Furniture sizes are typical retail sizes. The summary lists these limits.
 - **Photos.** The browser downscales and re-encodes the photo, which removes EXIF data including GPS. It is sent inline to Google's Gemini API, never uploaded to the Files API, and never written to disk or logged by our server. Logs hold only the call label, model, latency and token counts. Google's API terms cover what happens on their side, and we say so in the UI.
-- **Generated views.** Staged photos and 3D worlds (T-403, T-404) are labeled as design concepts, not to scale. The 3D room built from the checked plan is the one we stand behind.
+- **Generated views.** The staged concept is labeled "AI concept, not to scale. The 3D plan is what we checked." It is cached only in your browser tab, never on our server. Its prompt uses furniture names from our catalog, not your text, and tells the model to keep every door and window as photographed. The 3D room built from the checked plan is the one we stand behind.
 - **Prepared examples are labeled.** When the AI is unavailable, the prepared layouts are marked as hand-written stand-ins.
 
 ## Accessibility
@@ -95,6 +98,7 @@ Sample needs to try with a key:
 - [TASKS.md](TASKS.md): task board and claim protocol
 - [AGENTS.md](AGENTS.md): rules for humans and AI agents working in the repo
 - [docs/DEPLOY.md](docs/DEPLOY.md): deploying to Vercel
+- [docs/COST.md](docs/COST.md): cost and latency, and how to measure them
 
 ## License
 
