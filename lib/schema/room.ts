@@ -13,6 +13,9 @@ export const Measure = z.object({
 });
 export type Measure = z.infer<typeof Measure>;
 
+/** Like Measure, but zero is allowed: an opening can start right at the corner. */
+const OffsetMeasure = Measure.extend({ value: z.number().nonnegative() });
+
 export const Wall = z.enum(["north", "east", "south", "west"]);
 export type Wall = z.infer<typeof Wall>;
 
@@ -25,7 +28,7 @@ export const Opening = z.object({
   id: z.string().min(1),
   kind: z.enum(["door", "window"]),
   wall: Wall,
-  offset: Measure,
+  offset: OffsetMeasure,
   width: Measure,
   /** Doors only. "in" swings into this room; "out" and "none" take no floor space here. */
   swing: z.enum(["in", "out", "none"]).default("in"),

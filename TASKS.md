@@ -71,13 +71,15 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
   - [x] Timeout and one retry; errors return a useful message
 
 ### T-102 · Photo → estimated room (cut #3)
-- status: claimed by tim/claude @ 2026-10-24 17:00
+- status: review: code, stub tests and UI done; needs a live run with GEMINI_API_KEY on the T-406 photo (tim/claude)
 - deps: T-101
-- paths: `lib/ai/prompts/photo.ts`, `app/api/photo/route.ts`
+- paths: `lib/ai/prompts/photo.ts`, `lib/ai/photo.ts`, `app/api/photo/route.ts`, `components/flow/photo.ts`, photo card in `components/flow/StartStep.tsx`
 - done when:
-  - [ ] An inline image (never the Files API, never written to disk or logged) returns door/window positions and proportions
-  - [ ] Every value is marked `source: "estimated"`
+  - [x] An inline image (never the Files API, never written to disk or logged) returns door/window positions and proportions
+  - [x] Every value is marked `source: "estimated"`
   - [ ] Works on the demo photo (T-406)
+
+- notes: `POST /api/photo { photo: { mimeType, data } }` returns `{ room, notes, usage }`. The browser downscales to 1280 px JPEG first, which also strips EXIF/GPS. The model names walls from the camera's view (facing = north). `replyToRoom` clamps sizes to plausible ranges and keeps openings inside their walls. Fixed in the shared schema along the way: an opening's offset may now be 0 (a door at the corner), which the editor already allowed but `/api/plan` rejected. Prompt quality is untested until there is a key.
 
 ### T-103 · Propose → check → revise loop (never cut)
 - status: review: code and stub tests done; needs a live run with GEMINI_API_KEY (tim/claude)

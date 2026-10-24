@@ -12,7 +12,7 @@ import { EXAMPLE_NEEDS_TEXT, exampleApplies, examplePlan } from "./example";
 import { NeedsStep } from "./NeedsStep";
 import { PlansStep, type PlanState } from "./PlansStep";
 import { RoomStep } from "./RoomStep";
-import { StartStep } from "./StartStep";
+import { StartStep, type RoomPhoto } from "./StartStep";
 import { StepHeading } from "./StepHeading";
 import { Stepper, type Step } from "./Stepper";
 import { linkButton } from "./styles";
@@ -28,6 +28,7 @@ export function FlowApp() {
   const [step, setStep] = useState<Step>("start");
   const [moved, setMoved] = useState(false);
   const [room, setRoom] = useState<Room>(demoRoom);
+  const [photo, setPhoto] = useState<RoomPhoto | undefined>();
   const [needs, setNeeds] = useState<Needs>({ text: "", items: [], clearances: [] });
   const [plan, setPlan] = useState<PlanState>({ kind: "loading" });
   const [tour, setTour] = useState<Tour | null>(null);
@@ -86,8 +87,9 @@ export function FlowApp() {
           {step === "start" && (
             <StartStep
               focus={moved}
-              onPick={(r) => {
+              onPick={(r, p) => {
                 setRoom(r);
+                setPhoto(p);
                 setNeeds({ text: r.id === demoRoom.id ? EXAMPLE_NEEDS_TEXT : "", items: [], clearances: [] });
                 go("room");
               }}
@@ -96,6 +98,7 @@ export function FlowApp() {
           {step === "room" && (
             <RoomStep
               initial={room}
+              photo={photo}
               focus={moved}
               onBack={() => go("start")}
               onConfirm={(r) => {
