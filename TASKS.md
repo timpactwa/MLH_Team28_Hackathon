@@ -411,6 +411,17 @@ Pure Python, no AI, everything unit-tested.
 
 ---
 
+### T-412 · Interior design pivot proposal
+- status: review (newton/codex; proposal complete; awaiting review)
+- deps: none
+- paths: `INTERIOR_DESIGN_PLAN.md`; `TASKS.md` (this task only)
+- done when:
+  - [x] Document the new product, hackathon scope, architecture, and feasibility risks
+  - [x] Map the proposal to the recorded rubric and identify unconfirmed event requirements
+  - [x] Record the first technical experiment, fallback, and demo acceptance criteria
+
+---
+
 ## Changelog (append-only, one line each)
 
 - Sat Oct 24: TASKS.md created from BRAINSTORM.md.
