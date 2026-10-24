@@ -200,7 +200,7 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
 ## Lane 4: visuals + ship (P4)
 
 ### T-401 · Cloud Run hello-world
-- status: open
+- status: claimed by tim/claude @ 2026-10-24 16:45 (Dockerfile and DEPLOY.md only; the deploy stays with a human)
 - deps: T-002
 - paths: `Dockerfile`, `.dockerignore`, `docs/DEPLOY.md`
 - done when:
