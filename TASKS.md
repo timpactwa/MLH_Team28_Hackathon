@@ -33,7 +33,7 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
 ## Lane 0: contracts (do these first)
 
 ### T-001 · Shared Zod schema
-- status: open
+- status: claimed by tim/claude @ 2026-10-24 13:00
 - owner lane: P3
 - paths: `lib/schema/`
 - done when:
@@ -93,7 +93,7 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
 ## Lane 2: geometry + data (P3)
 
 ### T-201 · Geometry checks (never cut)
-- status: open
+- status: claimed by tim/claude @ 2026-10-24 13:00
 - deps: T-001
 - paths: `lib/geometry/`, `lib/geometry/*.test.ts`
 - done when:
@@ -103,7 +103,7 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
   - [ ] Tests include the demo case: an oversized sofa over the door fails and the smaller sofa passes
 
 ### T-202 · Furniture catalog
-- status: open
+- status: claimed by tim/claude @ 2026-10-24 13:00
 - deps: T-001
 - paths: `data/catalog.json`, `public/models/`
 - done when:
