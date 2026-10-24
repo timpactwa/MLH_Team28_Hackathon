@@ -400,6 +400,17 @@ Pure Python, no AI, everything unit-tested.
 
 ---
 
+### T-411 · Documentation audit and project summary
+- status: claimed by newton/docs-audit-agent @ 00:00 (session time unavailable)
+- deps: none
+- paths: `TASKS.md` (this task only); read-only review of repository documentation and linked public sources
+- done when:
+  - [ ] Compare documented implementation claims with tracked repository files
+  - [ ] Cross-check key external technical and NYC service claims against official sources
+  - [ ] Report current project state, inconsistencies, and remaining uncertainties to the user
+
+---
+
 ## Changelog (append-only, one line each)
 
 - Sat Oct 24: TASKS.md created from BRAINSTORM.md.
