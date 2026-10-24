@@ -187,7 +187,7 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
 - notes: `LayoutSummary` sits under the editor (a skip link jumps to it) and updates live. It lists the room with estimated or confirmed per value, each opening, each item's size, position and orientation, the requested clear space, problems, and limits. "Print summary" prints only the summary. Phrases are in `describe.ts`, with tests. Still to do: an NVDA/VoiceOver pass by a person.
 
 ### T-306 · UI/UX polish pass
-- status: open
+- status: claimed by tim/claude @ 2026-10-24 16:10
 - deps: T-303
 - paths: `app/globals.css`, `components/ui/`
 - done when:
