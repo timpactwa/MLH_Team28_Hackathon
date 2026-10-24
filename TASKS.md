@@ -45,7 +45,7 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
   - [ ] Exported TS types, plus JSON Schema output for Gemma structured output
 
 ### T-002 · Repo scaffold
-- status: open
+- status: claimed by tim/claude @ 2026-10-24
 - owner lane: Tim
 - paths: `package.json`, `app/layout.tsx`, `tsconfig.json`, `LICENSE`, `.gitignore`, `.env.example`, `vitest.config.ts`
 - done when:
