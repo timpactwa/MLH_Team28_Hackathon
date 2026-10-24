@@ -7,6 +7,9 @@ import { Needs, Room } from "@/lib/schema";
 
 const Body = z.object({ room: Room, needs: Needs });
 
+/** Seconds. Up to six model calls of 45 s each. */
+export const maxDuration = 300;
+
 /** POST { room, needs } -> { options, usage }: two layouts, each checked and revised at most twice. */
 export async function POST(request: Request) {
   const body = await readBody(request, Body);

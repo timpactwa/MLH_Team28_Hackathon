@@ -5,6 +5,9 @@ import { interpretNeeds } from "@/lib/ai/needs";
 
 const Body = z.object({ text: z.string().trim().min(1).max(2000) });
 
+/** Seconds. One call, plus one retry on invalid JSON. */
+export const maxDuration = 60;
+
 /** POST { text } -> { needs, notes, usage }: free text to catalog items and clearances. */
 export async function POST(request: Request) {
   const body = await readBody(request, Body);

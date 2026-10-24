@@ -55,7 +55,7 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
   - [x] MIT `LICENSE` file at the root
   - [x] `npm run dev`, `typecheck`, `test` (and `lint`, `build`) all work
   - [x] `.env.example` lists `GEMINI_API_KEY`, `GEMMA_MODEL`, `WORLDLABS_API_KEY`; `.env*` is gitignored except `.env.example`
-- notes: `next.config.ts` sets `output: "standalone"` for the Cloud Run container (T-401). Next 16 re-adds its agent-rules block to AGENTS.md on `next dev`, so it is committed there. The page title is "Room Fit (working title)" until a product name is chosen.
+- notes: Next 16 re-adds its agent-rules block to AGENTS.md on `next dev`, so it is committed there. The page title is "Room Fit (working title)" until a product name is chosen.
 
 ---
 
@@ -201,23 +201,22 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
 
 ## Lane 4: visuals + ship (P4)
 
-### T-401 · Cloud Run hello-world
-- status: claimed: moving hosting off Google Cloud to Vercel (tim/claude)
+### T-401 · Hosting setup (Vercel)
+- status: review: moved off Cloud Run (no credits left); DEPLOY.md has the Vercel steps; a human connects the repo and adds the key (tim/claude)
 - deps: T-002
-- paths: `Dockerfile`, `.dockerignore`, `docs/DEPLOY.md`
+- paths: `docs/DEPLOY.md`, `next.config.ts`
 - done when:
-  - [ ] Standalone Next.js build in a container; deployed to Cloud Run **by a human**
-  - [ ] `GEMINI_API_KEY` held in Secret Manager
-  - [ ] Confirm which APIs the $25 credits cover (Cloud Run; Gemini API billing) and record it in DEPLOY.md
+  - [ ] Project imported on Vercel and deployed **by a human**
+  - [ ] `GEMINI_API_KEY` set in Vercel environment variables, never committed
 
-- notes: the standalone server was checked locally (pages, static assets, 503 without a key). The Docker image itself is untested here because Docker Desktop was not running. `docs/DEPLOY.md` has the exact gcloud commands (Secret Manager, `gcloud run deploy --source .`, timeout 300, max 3 instances) and the open billing questions.
+- notes: Cloud Run, the Dockerfile and Secret Manager were dropped on 2026-10-24 because the Google Cloud credits ran out. Vercel's free plan runs the Next.js app as is. Long routes set `maxDuration` (plan 300 s). An AI Studio key works without billing; its free tier is rate-limited.
 
 ### T-402 · Deploy the full app
 - status: open
 - deps: T-401, T-303
 - paths: `docs/DEPLOY.md`
 - done when:
-  - [ ] Full flow works at the public URL; prepared example loads instantly
+  - [ ] Full flow works at the public Vercel URL; prepared example loads instantly
 
 ### T-403 · Gemini staged photo (layer b, cut #2)
 - status: claimed (tim/claude)

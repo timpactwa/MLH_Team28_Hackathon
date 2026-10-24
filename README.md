@@ -24,7 +24,7 @@ flowchart LR
     Editor --> Summary[Text summary<br/>components/summary]
     Editor -. same code .-> Geo
   end
-  subgraph Server["Next.js on Cloud Run"]
+  subgraph Server["Next.js API routes (Vercel)"]
     Photo["/api/photo"] --> Gemma
     Needs["/api/needs"] --> Gemma
     Plan["/api/plan"] --> Planner[Planner loop<br/>lib/ai/planner.ts]
@@ -42,7 +42,7 @@ Requires Node 22+.
 
 ```bash
 npm install
-cp .env.example .env.local   # then add GEMINI_API_KEY
+cp .env.example .env.local   # then add GEMINI_API_KEY (free from aistudio.google.com)
 npm run dev                  # http://localhost:3000
 ```
 
@@ -94,7 +94,7 @@ Sample needs to try with a key:
 - [INTERIOR_DESIGN_PLAN.md](INTERIOR_DESIGN_PLAN.md): product plan and locked decisions
 - [TASKS.md](TASKS.md): task board and claim protocol
 - [AGENTS.md](AGENTS.md): rules for humans and AI agents working in the repo
-- [docs/DEPLOY.md](docs/DEPLOY.md): Cloud Run deploy
+- [docs/DEPLOY.md](docs/DEPLOY.md): deploying to Vercel
 
 ## License
 

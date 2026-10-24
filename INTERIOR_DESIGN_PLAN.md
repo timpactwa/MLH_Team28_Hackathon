@@ -14,9 +14,9 @@ These override anything later in this document that conflicts with them. To chan
 | D4 | What users see | Three layers, built in this order: **(a)** a Three.js / R3F 3D room built from the confirmed geometry, plus a 2D plan with clearance zones, WASD and click-to-move walkthrough (core); **(b)** a Gemini-staged version of the original photo, shown side by side as a "style concept"; **(c)** a World Labs Marble world, **pre-generated** and labeled "AI concept, not to scale. The 3D plan is what we checked." |
 | D5 | World Labs guardrails | Nobody starts it until (a) works end to end. One owner, in separate files. **Kill rule:** if it doesn't load in the browser by Sun 2 AM, or it invents doors, it becomes a concept preview or gets cut. Cost is about $1.26 per standard world or $0.18 per draft, sold in $5 minimums out of pocket. Generation takes about 5 minutes, so it is never live in the video. |
 | D6 | Team lanes | Frontend/UX: Tim. AI: P2. Geometry and data: P3. Visuals and ship: P4. Names to be filled in. |
-| D7 | Stack | TypeScript everywhere: Next.js (App Router), React Three Fiber + drei, Tailwind, Zod schemas, `@google/genai`, and a pure-TS geometry module shared by the browser and the server. Deployed as one container on Cloud Run with Secret Manager. No database. |
+| D7 | Stack | TypeScript everywhere: Next.js (App Router), React Three Fiber + drei, Tailwind, Zod schemas, `@google/genai`, and a pure-TS geometry module shared by the browser and the server. Hosted on Vercel's free plan with the key in its environment variables (moved off Cloud Run on 2026-10-24: no Google Cloud credits left). No database. |
 | D8 | Demo room | A free-licensed empty-room photo (Unsplash or Pexels; license link in the README), with dimensions labeled "example dimensions, not measured." The demo shows Gemma's estimates being corrected by the user. |
-| D9 | Timeline | Sat +1 hr: schema locked, repo licensed, hello-world deployed on Cloud Run. Sat 6 PM: skeleton working end to end. Sat midnight: full loop deployed, sofa rejection demo-able. Sun 2 AM: World Labs kill decision. Sun 9 AM: feature freeze. Sun 11:00–11:30 AM: both submissions in. |
+| D9 | Timeline | Sat +1 hr: schema locked, repo licensed, hello-world deployed. Sat 6 PM: skeleton working end to end. Sat midnight: full loop deployed, sofa rejection demo-able. Sun 2 AM: World Labs kill decision. Sun 9 AM: feature freeze. Sun 11:00–11:30 AM: both submissions in. |
 | D10 | Cut order | Cut in this order: World Labs, then the staged photo, then Gemma reading the photo (fall back to manual entry). **Never cut:** the geometry checks, the propose → check → revise loop, the 3D room, the accessible non-3D summary. |
 
 ## The idea
@@ -90,7 +90,7 @@ A generated 3D world is an approximate visualization. Its appearance, collider m
 | Immersive concept | World Labs Marble world, rendered with Spark in Three.js, pre-generated | Layer (c); kill rule D5 |
 | Core tour | Confirmed room and furniture as conventional 3D geometry | Layer (a), the core |
 | Backend | Next.js API routes; Zod validates all model JSON | Locked (D7) |
-| Deployment | One container on Cloud Run with Secret Manager, paid from the $25 credits | Locked; a human runs the deploy |
+| Deployment | Vercel free plan; `GEMINI_API_KEY` in Vercel environment variables; AI Studio key on its free tier | Locked; a human runs the deploy |
 
 Suggested flow: user inputs become a room model and design brief. The planner proposes arrangements, the geometry checker rejects invalid proposals, and the viewer renders an accepted arrangement. Image generation adds a style reference. World generation is optional.
 

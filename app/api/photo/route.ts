@@ -5,6 +5,9 @@ import { estimateRoom, PhotoInput } from "@/lib/ai/photo";
 
 const Body = z.object({ photo: PhotoInput });
 
+/** Seconds. One call, plus one retry on invalid JSON. */
+export const maxDuration = 60;
+
 /** POST { photo: { mimeType, data } } -> { room, notes, usage }. The photo is used once, in memory. */
 export async function POST(request: Request) {
   const body = await readBody(request, Body);
