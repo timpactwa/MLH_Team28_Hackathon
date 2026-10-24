@@ -91,7 +91,7 @@ Use the generated-world route only if the result supports an honest, coherent de
 
 ## Fit to the recorded judging rubric
 
-The following point values come from the rubric transcription in the old `BRAINSTORM.md`. The slideshow itself was not available during planning. Confirm the values and rules against the deck before submission.
+Point values confirmed against the event deck (slides 14–15).
 
 | Criterion | Points | Evidence to build or collect |
 | --- | ---: | --- |
@@ -111,11 +111,14 @@ An attractive tour alone leaves much of this rubric unanswered. The constraint d
 
 ## Track strategy and event requirements
 
-The official Virginia Tech event page lists Best Open-Source AI Project and Best Use of Gemma 4 for Saturday. It lists Best Use of Gemini API, Best AI Agent, and GDG AI for Good: Housing for Sunday.
+Confirmed from the event deck (slides 7, 8, 12). It supersedes the event web page, which lists a different set of tracks.
 
-The previous plan selected Gemma. Reassess that choice for this product. Gemini image generation does not establish use of Gemma. If the team selects the Gemma track, give Gemma a substantive planning or revision role and confirm the available model's capabilities. Do not add an agent solely to claim an agent track.
+- **MLH tracks (pick only ONE):** Best Open-Source AI Project, Best Use of Gemma 4 ("core to how the product works, not added at the end"), Best Use of Google Cloud, Best UI/UX ("polished, accessible, intuitive experience with a clear user flow").
+- **GDG track:** Best Overall AI for Housing, submitted separately on codingjam.dev under the Virginia Tech chapter entry.
+- **Submission:** public GitHub repo with an open-source license file, a two-minute video, project name, description and tech used. Window is Sunday 11:00 AM–12:30 PM, and 12:30 PM is the hard deadline. Late submissions are not accepted.
+- The deck's theme slide says "Creative builds welcome, including AI-designed tiny homes, if they solve a real need." The design direction fits, provided the housing need is validated.
 
-The old plan records a public repository, an open-source license, a two-minute video, separate MLH and Virginia Tech housing submissions, and a Sunday 11:00 AM–12:30 PM submission window. These requirements, the timezone, and permitted track combinations need confirmation from the event deck. Do not carry forward the old track selection as a confirmed rule for this pivot.
+The MLH track is still open. Gemini image generation does not count toward the Gemma track.
 
 ## Responsible product behavior
 
