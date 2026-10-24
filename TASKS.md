@@ -253,12 +253,14 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
   - [ ] License and link recorded in `docs/DATA.md`
 
 ### T-407 · README + docs
-- status: claimed by tim/claude @ 2026-10-24 17:20 (first draft; P4 finishes it after the deploy)
+- status: review: README drafted; P4 adds the live URL after T-402, the World Labs and staging notes, and `docs/ARCHITECTURE.md` if wanted (tim/claude)
 - deps: T-402
 - paths: `README.md`, `docs/ARCHITECTURE.md`
 - done when:
   - [ ] Setup, environment variables, architecture diagram, limitations, sample inputs, how to reproduce the demo
   - [ ] Responsible AI section: estimated vs confirmed, no certification claims, photo handling, generated-view labels
+
+- notes: README has the pitch, how it works, a mermaid architecture diagram, setup and env vars, step-by-step demo reproduction without a key, sample needs, responsible AI, accessibility, and links. The diagram lives in the README for now rather than `docs/ARCHITECTURE.md`.
 
 ### T-408 · Cost and latency report
 - status: open

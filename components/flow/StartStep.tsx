@@ -98,7 +98,7 @@ export function StartStep({ onPick, focus }: { onPick: (room: Room, photo?: Room
               you check every number next.
             </p>
             <p className="text-xs text-stone-600">
-              The photo is shrunk in your browser (location data removed), used once, and never stored.
+              Your photo is shrunk in your browser (location data removed), then sent to Google&apos;s Gemini API to be read. We don&apos;t save it; Google&apos;s API terms cover what happens on their side.
             </p>
           </div>
           <div className="mt-auto flex flex-col gap-2">
