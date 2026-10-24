@@ -62,7 +62,7 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
 ## Lane 1: AI (P2)
 
 ### T-101 · Gemma client and the needs → furniture call
-- status: open
+- status: claimed by tim/claude @ 2026-10-24 14:00
 - deps: T-001, T-002
 - paths: `lib/ai/gemma.ts`, `lib/ai/prompts/needs.ts`, `app/api/needs/route.ts`
 - done when:
@@ -80,7 +80,7 @@ Cut order (D10): T-404, then T-403, then T-102. **Never cut:** T-201, T-103, T-3
   - [ ] Works on the demo photo (T-406)
 
 ### T-103 · Propose → check → revise loop (never cut)
-- status: open
+- status: claimed by tim/claude @ 2026-10-24 14:00
 - deps: T-101, T-201
 - paths: `lib/ai/planner.ts`, `lib/ai/prompts/layout.ts`, `app/api/plan/route.ts`
 - done when:
